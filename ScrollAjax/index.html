@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Scroll Lab</title>
+
+    <style>
+        /*body{
+            height:2000px;
+        }*/
+        div {
+            font-size:40px;
+            width: 200px;
+            height: 300px;
+            background-color: brown;
+            margin:20px;
+        }
+        
+    </style>
+
+</head>
+<body>
+    <!--ازاي بقى نلود داتا جديدة اصلاً او صفحة جديدة-->
+
+    <div id="container"></div>
+
+    <script>
+    
+        var start = 0;
+        var end = 3;
+        var container = document.getElementById("container");
+        ajax(start, end);
+
+        function ajax(start, end)
+        {
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", `https://localhost:44307/City.aspx?start=${start}&end=${end}`);
+            xhr.send();
+            xhr.addEventListener("readystatechange", function () {
+                if (xhr.readyState == 4) {
+                    var respone = JSON.parse(xhr.response);
+                    for (i = 0; i < respone.length; i++)
+                    {
+                        container.innerHTML += `<div>${respone[i].Name}</div>`;        
+                    }
+                 }
+            })}
+
+        window.addEventListener('scroll', () => {
+
+            if ((window.innerHeight + document.documentElement.scrollTop) >= document.body.scrollHeight)
+            {
+                start += 3;
+                end += 3;
+                ajax(start, end);            
+
+            }
+        });
+
+       
+
+    </script>
+
+</body>
+</html>
